@@ -15,10 +15,12 @@ def main():
 
     for jsn_key in channel_jsn:
         if jsn_key['is_archived'] == False:
-            print('#' + jsn_key['name'] + '\n' + '```' + jsn_key['purpose']['value'])
+
             if jsn_key['topic']['value'] != '':
-                print('topic: ' +jsn_key['topic']['value'])
-            print('```')
+                topic = '[Topic: ' + jsn_key['topic']['value'] + ']'
+            else:
+                topic = ''
+            print('#' + jsn_key['name'] + ' `' + jsn_key['purpose']['value'] + topic + '`')
 
 def channel_list(client):
     channels = client.api_call("channels.list")
