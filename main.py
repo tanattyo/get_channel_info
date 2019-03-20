@@ -1,5 +1,4 @@
 import os
-import time
 from slackclient import SlackClient
 from operator import itemgetter
 
@@ -13,16 +12,27 @@ def main():
     # nameに応じてソート
     channel_jsn.sort(key=itemgetter('name'))
 
-    list_txt = ''
+    list_txt = ':slack: 現在のチャンネル一覧はこちら :slack:\n'
     for jsn_key in channel_jsn:
-        if jsn_key['is_archived'] == False:
 
-            if jsn_key['topic']['value'] != '':
-                topic = '[Topic: ' + jsn_key['topic']['value'] + ']'
-            else:
-                topic = ''
-            txt = '<#' + jsn_key['id'] + '> `' + jsn_key['purpose']['value'] + topic + '`' + '\n'
-            list_txt += txt
+        # アーカイブされているものは表示しない
+        if jsn_key['is_archived'] == True:
+            continue
+
+        # _から始まるチャンネルは表示しない
+        init = jsn_key['name']
+        if init[:1] == '_':
+            continue
+
+        # topicの表示を整える
+        if jsn_key['topic']['value'] != '':
+            topic = '[Topic: ' + jsn_key['topic']['value'] + ']'
+        else:
+            topic = ''
+
+        # テキストを整える
+        txt = '<#' + jsn_key['id'] + '> `' + jsn_key['purpose']['value'] + topic + '`' + '\n'
+        list_txt += txt
 
 
     send_message(list_txt)
