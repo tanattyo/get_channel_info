@@ -1,6 +1,4 @@
 import os
-import pprint
-import json
 from slackclient import SlackClient
 from operator import itemgetter
 
